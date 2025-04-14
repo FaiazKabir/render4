@@ -18,7 +18,7 @@ import pandas as pd
 # ──────────────────────────────────────────────────────────────────────────────
 # Initialize Dash & expose the Flask server for Render’s Gunicorn
 # ──────────────────────────────────────────────────────────────────────────────
-app = Dash(__name__, suppress_callback_exceptions=True)
+app = dash.Dash(__name__, suppress_callback_exceptions=True)
 server = app.server   # <-- this is what Render’s Gunicorn will look for
 
 # ──────────────────────────────────────────────────────────────────────────────
