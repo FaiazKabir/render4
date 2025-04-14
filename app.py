@@ -38,17 +38,19 @@ if not os.path.exists(os.path.join(DATA_DIR, 'geoBoundaries-CAN-ADM1_simplified.
     unzip_geojsons(os.path.join(BASE_DIR, 'data.zip'), DATA_DIR)
 
 # Load province polygons
-with open(os.path.join(DATA_DIR, 'geoBoundaries-CAN-ADM1_simplified.geojson')) as f:
-    geojson_data = json.load(f)
+try:
+    with open(os.path.join(DATA_DIR, 'geoBoundaries-CAN-ADM1_simplified.geojson')) as f:
+        geojson_data = json.load(f)
+    gdf = gpd.GeoDataFrame.from_features(geojson_data['features'])
+except Exception as e:
+    print(f"Error loading province data: {str(e)}")
+    # Create empty fallback data
+    geojson_data = {"type": "FeatureCollection", "features": []}
+    gdf = gpd.GeoDataFrame()
 
-gdf = gpd.GeoDataFrame.from_features(geojson_data['features'])
 gdf = gdf.rename(columns={"shapeName": "Province"})
 gdf.set_crs(epsg=4326, inplace=True)
 
-# [Rest of your original code remains the same until the callbacks]
-
-if __name__ == '__main__':
-    app.run_server(host='0.0.0.0', port=int(os.environ.get('PORT', 8050)), debug=False)
 
 # Define notable places per province (as lists)
 province_to_places = {
@@ -83,6 +85,7 @@ except Exception as e:
     print(f"Error loading GeoJSON: {str(e)}")
     # Fallback to empty DataFrame if needed
     points_gdf = gpd.GeoDataFrame()
+
 
 # Precompute a DataFrame of only those POIs that match the notable places AND lie within the province boundary.
 filtered_rows = []
@@ -209,9 +212,6 @@ def update_map(selected_provinces, clicked_markers):
     return fig
 
     
-
-# [Rest of your data processing code...]
-
 if __name__ == '__main__':
     app.run_server(host='0.0.0.0', port=int(os.environ.get('PORT', 8050)), debug=False)
 
