@@ -3,5 +3,7 @@ plotly==5.18.0
 geopandas==0.14.1
 pandas==2.1.4
 gunicorn==21.2.0  # MUST be included
+fiona==1.9.5  # Critical version fix
 shapely==2.0.2
 pyproj==3.6.1
+numpy==1.26.3
