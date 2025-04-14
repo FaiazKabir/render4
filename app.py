@@ -71,10 +71,18 @@ province_to_places = {
 gdf["Notable Places"] = gdf["Province"].map(lambda prov: ", ".join(province_to_places[prov]))
 
 # Load points-of-interest geoJSON as a GeoDataFrame
-poi_geojson_path = "hotosm_can_points_of_interest_points_geojson.geojson"
-points_gdf = gpd.read_file(poi_geojson_path)
-points_gdf.set_crs(epsg=4326, inplace=True)
-points_gdf = points_gdf.to_crs(gdf.crs)
+#poi_geojson_path = "hotosm_can_points_of_interest_points_geojson.geojson"
+#points_gdf = gpd.read_file(poi_geojson_path)
+#points_gdf.set_crs(epsg=4326, inplace=True)
+#points_gdf = points_gdf.to_crs(gdf.crs)
+
+# Replace your GeoJSON loading code with this more robust version:
+try:
+    points_gdf = gpd.read_file(os.path.join(DATA_DIR, "hotosm_can_points_of_interest_points_geojson.geojson"))
+except Exception as e:
+    print(f"Error loading GeoJSON: {str(e)}")
+    # Fallback to empty DataFrame if needed
+    points_gdf = gpd.GeoDataFrame()
 
 # Precompute a DataFrame of only those POIs that match the notable places AND lie within the province boundary.
 filtered_rows = []
