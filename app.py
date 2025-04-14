@@ -134,7 +134,11 @@ def update_map(selected_provinces, clicked_markers):
 # Only run this when doing `python app.py` locally.
 # On Render we’ll use Gunicorn and the `server` object instead.
 # ──────────────────────────────────────────────────────────────────────────────
+
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 8050))
+    # Read the PORT env var that Render sets (default 10000)
+    port = int(os.environ.get('PORT', 10000))
+    # Bind on 0.0.0.0 so Render’s load‑balancer can reach you
     app.run_server(host='0.0.0.0', port=port, debug=False)
+
 
